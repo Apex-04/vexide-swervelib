@@ -4,7 +4,7 @@
 /*    File: main.rs                                 */
 /*    Author: Andrew Bobay                          */
 /*    Date Created: Sep 23rd 2025 12:00PM           */
-/*    Date Modified: Nov 05th 2025 02:42PM          */
+/*    Date Modified: Nov 12th 2025 02:30PM          */
 /*    Team: BBR1                                    */
 /*    Description: Example Main file                */
 /*                                                  */
@@ -19,6 +19,7 @@ use autons::{
 };
 use vexide::{devices::peripherals, prelude::*};
 mod swervelib;
+use crate::swervelib::spline::spline; // makes things easier to create splines in line
 mod eclipselib;
 extern crate alloc;
 pub use alloc::vec;
@@ -31,14 +32,11 @@ struct Robot {
 }
 
 impl Robot{
-    async fn match_auto(&mut self) {
-
-    }
-    async fn elims_auto(&mut self) {
-
-    }
-    async fn skills_auto(&mut self) {
-
+    async fn test_auto(&mut self) {
+        self.swerve.drive_to_coordinates(vec![
+            spline(10.0, 40.0, 0.0), 
+            spline(40.0, 30.0, 0.0)
+            ]);
     }
 }
 
@@ -70,13 +68,13 @@ async fn main(peripherals: Peripherals) {
         controller: peripherals.primary_controller,
         swerve: swervelib::swervedrive::SwerveDrive::new(
             swervelib::swervemod::SwerveModule::new(
-                swervelib::swervemotor::SwerveMotor::new(peripherals.port_1, Gearset::Blue, Direction::Forward), 
-                swervelib::swervemotor::SwerveMotor::new(peripherals.port_2, Gearset::Blue, Direction::Forward), 
+                swervelib::swervemotors::SwerveMotor::new(peripherals.port_1, Gearset::Blue, Direction::Forward), 
+                swervelib::swervemotors::SwerveMotor::new(peripherals.port_2, Gearset::Blue, Direction::Forward), 
                 RotationSensor::new(peripherals.port_3, Direction::Forward),
             ),
             swervelib::swervemod::SwerveModule::new(
-                swervelib::swervemotor::SwerveMotor::new(peripherals.port_4, Gearset::Blue, Direction::Forward), 
-                swervelib::swervemotor::SwerveMotor::new(peripherals.port_5, Gearset::Blue, Direction::Forward), 
+                swervelib::swervemotors::SwerveMotor::new(peripherals.port_4, Gearset::Blue, Direction::Forward), 
+                swervelib::swervemotors::SwerveMotor::new(peripherals.port_5, Gearset::Blue, Direction::Forward), 
                 RotationSensor::new(peripherals.port_6, Direction::Forward),
             ),
             InertialSensor::new(peripherals.port_7),
@@ -91,9 +89,7 @@ async fn main(peripherals: Peripherals) {
         .compete(SimpleSelect::new(
             peripherals.display,
             [
-                route!("Match Auto", Robot::match_auto),
-                route!("Elims Auto", Robot::elims_auto),
-                route!("Skills", Robot::skills_auto),
+                route!("Test Auto", Robot::test_auto),
             ],
         ))
         .await;

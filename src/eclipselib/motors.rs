@@ -18,6 +18,8 @@ use vexide::devices::{PortError, peripherals};
 use vexide::prelude::*;
 extern crate alloc;
 pub use alloc::vec;
+use core::time::{self, Duration};
+
 
 pub struct AdvMotor{
     motor: Motor
@@ -40,35 +42,41 @@ pub fn spin(&mut self, volts: f64){
     let _ = self.motor.set_voltage(volts);
 }
 
-pub async fn spin_for(&mut self, target: f64, p_value: f64) {
+pub async fn pid_spin_for(&mut self, target: f64, kp: f64, ki: f64, kd: f64) {
     let _ = self.motor.set_position(Position::from_degrees(0.0));
 
+    let mut last_error = 0.0;
+    let mut integral = 0.0;
 
-    // Loop until the motor is close to the target
     while let Ok(current_position) = self.motor.position() {
-        if current_position.as_degrees() > target.abs() {
-               break;
-           }
-   
-           // Calculate the error, the difference between the target and the current position.
-           let pct_error = 100.0 - (current_position.as_degrees()/target);
-   
-           // Calculate the voltage to send to the motor.
-           // This is proportional to the error, which is why it's called a P-loop.
-           let voltage = pct_error * p_value;
-   
-           // Clamp the voltage to the motor's maximum voltage range.
-           let max_voltage = self.motor.max_voltage();
-           let clamped_voltage = voltage.clamp(-max_voltage, max_voltage);
-   
-           // Set the motor's voltage.
-           let _ = self.motor.set_voltage(clamped_voltage);
-       }  
-   
-       // Stop the motor once the target is reached
-       let _ = self.motor.brake(BrakeMode::Hold);
-   }
+        let current_degrees = current_position.as_degrees();
+        let error = target - current_degrees;
+
+        if error.abs() < 0.5 {
+            break;
+        }
+
+        integral += error;                       // I-term (scaled by loop frequency)
+        let derivative = error - last_error;     // D-term (change per loop)
+        last_error = error;
+
+        // PID control output
+        let output = (kp * error) + (ki * integral) + (kd * derivative);
+
+        // Clamp and apply to motor
+        let max_voltage = self.motor.max_voltage();
+        let _ = self.motor.set_voltage(output.clamp(-max_voltage, max_voltage));
+
+        // small wait to keep dt constant
+        vexide::time::sleep(Duration::from_millis(10)).await;
+    }
+
+    let _ = self.motor.brake(BrakeMode::Hold);
 }
+}
+
+
+
 pub struct MotorGroup {
     motors: Vec<Motor>,
 }

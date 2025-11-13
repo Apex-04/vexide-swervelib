@@ -12,9 +12,9 @@
 
 // Spline Coordinate are based on Red alliance, Right corner
 pub struct Spline{
-    north: f64,
-    west: f64,
-    up: f64
+    north: f64, // Torwards blue alliance 
+    west: f64, // Torwards Head Ref station 
+    up: f64 
 }
 impl Spline{
     pub fn new(north:f64, west:f64, up:f64) -> Self{
