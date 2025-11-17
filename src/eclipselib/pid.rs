@@ -4,7 +4,7 @@
 /*    File: pid.rs                                  */
 /*    Author: Andrew Bobay                          */
 /*    Date Created: Nov 9th 2025 11:30AM            */
-/*    Date Modified: Nov 13th 2025 8:00AM           */
+/*    Date Modified: Nov 17th 2025 3:00PM           */
 /*    Team: BBR1                                    */
 /*    Description: pid functions                    */
 /*                                                  */
@@ -91,7 +91,7 @@ pub struct PIDController {
     target: Option<f64>,
     // Encoder input is handled in functions
 }
-
+#[allow(unused)]
 impl PIDController {
     pub fn set_gains(kp: f64, ki: f64, kd: f64) -> Self {
         Self {kp,ki,kd,target: None}

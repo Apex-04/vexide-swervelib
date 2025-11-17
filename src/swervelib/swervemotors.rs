@@ -13,11 +13,10 @@
 use alloc::vec::Vec;
 use vexide::prelude::*;
 use crate::eclipselib; 
-
 pub struct SwerveMotor{
     motor: eclipselib::motors::AdvMotor
 }
-
+#[allow(unused)]
 impl SwerveMotor{
     pub fn new(port: SmartPort, gearset: Gearset, direction: Direction) -> Self{
         Self{motor: eclipselib::motors::AdvMotor::new(port, gearset, direction)}
@@ -28,6 +27,7 @@ impl SwerveMotor{
 pub struct SwerveMotorGroup{
     motors: Vec<SwerveMotor>
 }
+#[allow(unused)]
 impl SwerveMotorGroup{
     pub fn new(motors: Vec<SwerveMotor>) -> Self{
         Self{motors}

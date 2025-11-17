@@ -4,7 +4,7 @@
 /*    File: motors.rs                               */
 /*    Author: Andrew Bobay                          */
 /*    Date Created: Oct 21st 2025 11:20AM           */
-/*    Date Modified: Nov 10th 2025 10:00AM          */
+/*    Date Modified: Nov 17th 2025 3:00PM           */
 /*    Team: BBR1                                    */
 /*    Description: Eclipselib advanced motor        */ 
 /*                 definitions                      */
@@ -25,6 +25,7 @@ pub struct AdvMotor{
     motor: Motor
 }
 
+#[allow(unused)]
 impl AdvMotor{
 // Creates a new AdvMotor Object 
 pub fn new(port: SmartPort, gearset: Gearset, direction: Direction) -> Self{
@@ -81,6 +82,7 @@ pub struct MotorGroup {
     motors: Vec<Motor>,
 }
 
+#[allow(unused)]
 impl MotorGroup {
     pub fn new(motors: Vec<Motor>) -> Self {
         Self { motors }

@@ -23,7 +23,7 @@ pub struct SwerveDrive{
     inertial: InertialSensor,
 
 }
-
+#[allow(unused)]
 impl SwerveDrive{
     pub fn new(left_module: swervelib::swervemod::SwerveModule, right_module: swervelib::swervemod::SwerveModule, inertial:InertialSensor) -> Self{
         Self{left_module, right_module, inertial}

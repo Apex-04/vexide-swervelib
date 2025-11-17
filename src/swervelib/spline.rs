@@ -16,6 +16,7 @@ pub struct Spline{
     west: f64, // Torwards Head Ref station 
     up: f64 
 }
+#[allow(unused)]
 impl Spline{
     pub fn new(north:f64, west:f64, up:f64) -> Self{
         Self{north, west, up}

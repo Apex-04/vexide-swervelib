@@ -1,5 +1,5 @@
 [package]
-name = "eclipselib_project"
+name = "swervelib_project"
 version = "0.2.0"
 edition = "2021"
 

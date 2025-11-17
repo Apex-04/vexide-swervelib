@@ -13,7 +13,6 @@
 use vexide::prelude::*;
 use vexide::devices::PortError; 
 use crate::swervelib;
-
 pub struct SwerveModule {
     smartmtr_top1: swervelib::swervemotors::SwerveMotor,
     smartmtr_bottom1: swervelib::swervemotors::SwerveMotor,
@@ -21,7 +20,7 @@ pub struct SwerveModule {
     smartmtr_bottom2: Option<swervelib::swervemotors::SwerveMotor>,
     azimuth: RotationSensor,
 }
-
+#[allow(unused)]
 impl SwerveModule {
     /// Create a standard 2-motor swerve module
     pub fn new(
